@@ -6,13 +6,13 @@ using WebApi.Services;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
-    public class JobsController : ControllerBase
+    public class JobController : ControllerBase
     {
         private readonly IJobService _jobService;
 
-        public JobsController(IJobService jobService)
+        public JobController(IJobService jobService)
         {
             _jobService = jobService;
         }
