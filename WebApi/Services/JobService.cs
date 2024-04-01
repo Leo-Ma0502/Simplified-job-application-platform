@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using WebApi.Data.Repositories;
+using WebApi.Repositories;
 using WebApi.Models;
 
 namespace WebApi.Services
