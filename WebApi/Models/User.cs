@@ -1,8 +1,11 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace WebApi.Models
 {
     public class User
     {
-        public int Id { get; set; }
+        [Key]
+        public int UId { get; set; }
         public string Email { get; set; }
         public string EncryptedPwd { get; set; }
         public string FirstName { get; set; }
