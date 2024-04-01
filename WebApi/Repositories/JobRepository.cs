@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using WebApi.Data;
 using WebApi.Models;
 
-namespace WebApi.Data.Repositories
+namespace WebApi.Repositories
 {
     public class JobRepository : IJobRepository
     {

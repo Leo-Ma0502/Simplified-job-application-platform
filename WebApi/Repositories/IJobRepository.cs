@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApi.Models;
 
-namespace WebApi.Data.Repositories
+namespace WebApi.Repositories
 {
     public interface IJobRepository
     {
