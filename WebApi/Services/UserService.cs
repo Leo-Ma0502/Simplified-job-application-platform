@@ -16,5 +16,16 @@ namespace WebApi.Services
         {
             return await _userRepository.GetUserByIdAsync(id);
         }
+
+        public async Task<User> RegisterAsync(User user)
+        {
+            return await _userRepository.RegisterAsync(user);
+        }
+
+        public async Task<bool> Exists(string email)
+        {
+            return await _userRepository.FindByEmailAsync(email) != null;
+        } 
+
     }
 }
