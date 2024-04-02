@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using WebApi.Models;
 using WebApi.Services;
+using WebApi.DTO;
 
 namespace WebApi.Controllers
 {
@@ -11,9 +12,12 @@ namespace WebApi.Controllers
     {
         private readonly IUserService _userService;
 
-        public UserController(IUserService userService)
+        private readonly ITokenService _tokenService;
+
+        public UserController(IUserService userService, ITokenService tokenService = null)
         {
             _userService = userService;
+            _tokenService = tokenService;
         }
 
         [HttpGet("{id}")]
@@ -58,6 +62,21 @@ namespace WebApi.Controllers
             {
                 return StatusCode(500, ex);
             }
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginDto)
+        {
+            var user = await _userService.AuthenticateAsync(loginDto.Email, loginDto.Password);
+
+            if (user == null)
+            {
+                return Unauthorized("Invalid credentials.");
+            }
+
+            var token = await _tokenService.GenerateToken(user);
+
+            return Ok(new { Token = token });
         }
 
     }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System.Threading.Tasks;
 using WebApi.Controllers;
+using WebApi.DTO;
 using WebApi.Models;
 using WebApi.Services;
 using Xunit;
@@ -108,5 +109,52 @@ namespace WebApi.Tests
             Assert.Equal(StatusCodes.Status400BadRequest, objectResult.StatusCode);
             Assert.Equal("User already exists.", objectResult.Value);
         }
+
+        [Fact]
+        public async Task Login_WithValidCredentials_ReturnsOkWithToken()
+        {
+            // Arrange
+            var mockUserService = new Mock<IUserService>();
+            var mockTokenService = new Mock<ITokenService>();
+            var loginDto = new LoginDTO { Email = "valid@example.com", Password = "Password123" };
+            var user = new User();
+
+            mockUserService.Setup(service => service.AuthenticateAsync(loginDto.Email, loginDto.Password))
+                           .ReturnsAsync(user);
+            mockTokenService.Setup(service => service.GenerateToken(It.IsAny<User>()))
+                            .ReturnsAsync("GeneratedToken123");
+
+            var controller = new UserController(mockUserService.Object, mockTokenService.Object);
+
+            // Act
+            var result = await controller.Login(loginDto);
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            Assert.NotNull(okResult.Value);
+            var resultValue = okResult.Value.GetType().GetProperty("Token").GetValue(okResult.Value, null);
+            Assert.Equal("GeneratedToken123", resultValue);
+        }
+
+        [Fact]
+        public async Task Login_WithInvalidCredentials_ReturnsUnauthorized()
+        {
+            // Arrange
+            var mockUserService = new Mock<IUserService>();
+            var mockTokenService = new Mock<ITokenService>();
+            var loginDto = new LoginDTO { Email = "invalid@example.com", Password = "WrongPassword" };
+
+            mockUserService.Setup(service => service.AuthenticateAsync(loginDto.Email, loginDto.Password))
+                           .ReturnsAsync((User)null);
+
+            var controller = new UserController(mockUserService.Object, mockTokenService.Object);
+
+            // Act
+            var result = await controller.Login(loginDto);
+
+            // Assert
+            Assert.IsType<UnauthorizedObjectResult>(result);
+        }
+
     }
 }

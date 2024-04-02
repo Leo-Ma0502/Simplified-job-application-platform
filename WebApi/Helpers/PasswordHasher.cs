@@ -19,5 +19,15 @@ public static class PasswordHasher
             iterationCount: 10000,
             numBytesRequested: 256 / 8));
     }
+
+    public static string HashedPassword(string password, byte[] salt)
+    {
+        return Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            password: password,
+            salt: salt,
+            prf: KeyDerivationPrf.HMACSHA256,
+            iterationCount: 10000,
+            numBytesRequested: 256 / 8));
+    }
 }
 
