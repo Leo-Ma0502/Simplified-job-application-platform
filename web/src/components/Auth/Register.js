@@ -1,16 +1,24 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
+import { registerUser } from "../../utils/Auth";
 
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fname, setFname] = useState("");
+  const [lname, setLname] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Implement register logic here, then navigate
-    navigate("/jobs");
+    const result = await registerUser(email, password, fname, lname);
+    if (result.success) {
+      alert(result.message);
+      navigate("/jobs");
+    } else {
+      alert(result.message);
+    }
   };
 
   return (
@@ -21,6 +29,7 @@ function Register() {
           <input
             type="email"
             placeholder="Email"
+            required={true}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="form-control"
@@ -30,8 +39,25 @@ function Register() {
           <input
             type="password"
             placeholder="Password"
+            required={true}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="form-control"
+          />
+        </div>
+        <div className="form-group">
+          <input
+            placeholder="First name"
+            value={fname}
+            onChange={(e) => setFname(e.target.value)}
+            className="form-control"
+          />
+        </div>
+        <div className="form-group">
+          <input
+            placeholder="Last name"
+            value={lname}
+            onChange={(e) => setLname(e.target.value)}
             className="form-control"
           />
         </div>
