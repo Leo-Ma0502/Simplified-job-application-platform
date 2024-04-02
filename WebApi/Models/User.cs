@@ -19,6 +19,6 @@ namespace WebApi.Models
 
         public string LastName { get; set; }
 
-        public byte[] Salt { get; set; }
+        public byte[]? Salt { get; set; }
     }
 }
