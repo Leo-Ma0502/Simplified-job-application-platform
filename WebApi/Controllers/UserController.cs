@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using WebApi.Models;
 using WebApi.Services;
 using WebApi.DTO;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApi.Controllers
 {
@@ -76,7 +78,17 @@ namespace WebApi.Controllers
 
             var token = await _tokenService.GenerateToken(user);
 
-            return Ok(new { Token = token });
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddHours(1)
+            };
+
+            Response.Cookies.Append("AuthToken", token, cookieOptions);
+
+            return Ok(new { Message = "Login successful" });
         }
 
     }
