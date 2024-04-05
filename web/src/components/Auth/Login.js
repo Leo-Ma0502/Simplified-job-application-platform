@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import { LoginUser } from "../../utils/Auth";
+import { useAuth } from "../../utils/AuthContext";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -14,7 +16,8 @@ function Login() {
     if (result.success) {
       alert(result.message);
       console.log(result.token);
-      navigate("/jobs");
+      login();
+      navigate("/job");
     } else {
       alert(result.message);
     }

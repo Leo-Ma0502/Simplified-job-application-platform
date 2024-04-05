@@ -1,4 +1,4 @@
-export const registerUser = async (email, password, fname, lname) => {
+export const RegisterUser = async (email, password, fname, lname) => {
   const endpoint = `${process.env.REACT_APP_API_BASE_URL}/user/register`;
   const options = {
     method: "POST",
@@ -25,7 +25,7 @@ export const registerUser = async (email, password, fname, lname) => {
   }
 };
 
-export const loginUser = async (email, password) => {
+export const LoginUser = async (email, password) => {
   try {
     const response = await fetch(
       `${process.env.REACT_APP_API_BASE_URL}/user/login`,
@@ -42,7 +42,6 @@ export const loginUser = async (email, password) => {
         }`
       );
     }
-
     return { success: true, message: "Login successful" };
   } catch (error) {
     return { success: false, message: error.message };
