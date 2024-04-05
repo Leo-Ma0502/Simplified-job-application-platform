@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
+import { loginUser } from "../../utils/Auth";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -9,8 +10,14 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Implement login logic here, then navigate
-    navigate("/jobs");
+    const result = await loginUser(email, password);
+    if (result.success) {
+      alert(result.message);
+      console.log(result.token);
+      navigate("/jobs");
+    } else {
+      alert(result.message);
+    }
   };
 
   return (
@@ -21,6 +28,7 @@ function Login() {
           <input
             type="email"
             placeholder="Email"
+            required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="form-control"
@@ -30,6 +38,7 @@ function Login() {
           <input
             type="password"
             placeholder="Password"
+            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="form-control"
