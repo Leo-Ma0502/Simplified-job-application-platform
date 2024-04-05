@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Register.css";
-import { registerUser } from "../../utils/Auth";
+import { RegisterUser } from "../../utils/Auth";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -12,7 +12,7 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await registerUser(email, password, fname, lname);
+    const result = await RegisterUser(email, password, fname, lname);
     if (result.success) {
       alert(result.message);
       navigate("/jobs");

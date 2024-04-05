@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
-import { loginUser } from "../../utils/Auth";
+import { LoginUser } from "../../utils/Auth";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -10,7 +10,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await loginUser(email, password);
+    const result = await LoginUser(email, password);
     if (result.success) {
       alert(result.message);
       console.log(result.token);
