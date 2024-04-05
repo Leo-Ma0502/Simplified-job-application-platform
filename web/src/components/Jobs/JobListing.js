@@ -1,5 +1,11 @@
+import Logout from "../Auth/Logout";
+
 function JobListing() {
-  return <>Job listing page</>;
+  return (
+    <div>
+      <Logout />
+    </div>
+  );
 }
 
 export default JobListing;
