@@ -43,8 +43,7 @@ export const loginUser = async (email, password) => {
       );
     }
 
-    const { token } = await response.json();
-    return { success: true, message: "Login successful", token };
+    return { success: true, message: "Login successful" };
   } catch (error) {
     return { success: false, message: error.message };
   }
