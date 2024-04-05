@@ -1,25 +1,19 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "./Login.css";
-import { LoginUser } from "../../utils/Auth";
 import { useAuth } from "../../utils/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useAuth();
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await LoginUser(email, password);
-    if (result.success) {
-      alert(result.message);
-      console.log(result.token);
-      login();
+    const loginSuccess = await login(email, password);
+    if (loginSuccess) {
       navigate("/job");
-    } else {
-      alert(result.message);
     }
   };
 
