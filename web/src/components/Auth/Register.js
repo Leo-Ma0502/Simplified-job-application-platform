@@ -29,7 +29,7 @@ function Register() {
           <input
             type="email"
             placeholder="Email"
-            required={true}
+            required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="form-control"
@@ -39,7 +39,7 @@ function Register() {
           <input
             type="password"
             placeholder="Password"
-            required={true}
+            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="form-control"
@@ -48,6 +48,7 @@ function Register() {
         <div className="form-group">
           <input
             placeholder="First name"
+            required
             value={fname}
             onChange={(e) => setFname(e.target.value)}
             className="form-control"
@@ -56,6 +57,7 @@ function Register() {
         <div className="form-group">
           <input
             placeholder="Last name"
+            required
             value={lname}
             onChange={(e) => setLname(e.target.value)}
             className="form-control"

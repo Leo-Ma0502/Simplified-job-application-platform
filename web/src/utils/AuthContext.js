@@ -11,10 +11,12 @@ export const AuthProvider = ({ children }) => {
     if (result.success) {
       alert(result.message);
       localStorage.setItem("loggedIn", true);
+      localStorage.setItem("name", result.name);
       setloggedIn(true);
       return true;
     } else {
       alert(result.message);
+      localStorage.removeItem("name");
       return false;
     }
   };

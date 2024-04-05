@@ -42,7 +42,9 @@ export const LoginUser = async (email, password) => {
         }`
       );
     }
-    return { success: true, message: "Login successful" };
+    const data = await response.json();
+    console.log(data.name);
+    return { success: true, message: "Login successful", name: data.name };
   } catch (error) {
     return { success: false, message: error.message };
   }
