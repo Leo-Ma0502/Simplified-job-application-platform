@@ -88,7 +88,7 @@ namespace WebApi.Controllers
 
             Response.Cookies.Append("AuthToken", token, cookieOptions);
 
-            return Ok(new { Message = "Login successful" });
+            return Ok(new { Message = "Login successful", Name = user.FirstName });
         }
 
     }
