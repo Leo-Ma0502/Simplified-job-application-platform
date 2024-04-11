@@ -58,6 +58,18 @@ namespace WebApi.Controllers
 
                 newUser.Password = null;
 
+                var token = await _tokenService.GenerateToken(user);
+
+                var cookieOptions = new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTime.UtcNow.AddHours(1)
+                };
+
+                Response.Cookies.Append("AuthToken", token, cookieOptions);
+
                 return CreatedAtAction(nameof(Get), new { id = newUser.UId }, newUser);
             }
             catch (Exception ex)
