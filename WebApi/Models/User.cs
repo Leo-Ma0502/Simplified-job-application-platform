@@ -6,9 +6,17 @@ namespace WebApi.Models
     {
         [Key]
         public int UId { get; set; }
+
+        [Required]
+        [EmailAddress]
         public string Email { get; set; }
-        public string EncryptedPwd { get; set; }
+        [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+        [Required]
         public string FirstName { get; set; }
+        [Required]
         public string LastName { get; set; }
+        public byte[]? Salt { get; set; }
     }
 }

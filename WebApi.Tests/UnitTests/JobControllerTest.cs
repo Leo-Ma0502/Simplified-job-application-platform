@@ -6,7 +6,7 @@ using WebApi.Models;
 using WebApi.Services;
 using Xunit;
 
-namespace WebApi.Tests
+namespace WebApi.Tests.Unit
 {
     public class JobControllerTests
     {
