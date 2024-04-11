@@ -5,16 +5,20 @@ export const RegisterUser = async (email, password, fname, lname) => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, password, fname, lname }),
+    body: JSON.stringify({
+      email,
+      password,
+      FirstName: fname,
+      LastName: lname,
+    }),
   };
   try {
     const response = await fetch(endpoint, options);
     if (!response.ok) {
-      var errorJson = await response.json();
       throw new Error(
         `Oops, registration failed, \nresponse status: ${
           response.status
-        }, \nreason: ${JSON.stringify(errorJson.errors) || "Unknown"}`
+        }, \nreason:\n ${(await response.text()) || "Unknown"}`
       );
     }
 

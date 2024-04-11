@@ -1,10 +1,25 @@
 import React, { createContext, useContext, useState } from "react";
-import { LoginUser } from "./Auth";
+import { LoginUser, RegisterUser } from "./Auth";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [loggedIn, setloggedIn] = useState(localStorage.getItem("loggedIn"));
+
+  const register = async (email, password, fname, lname) => {
+    const result = await RegisterUser(email, password, fname, lname);
+    if (result.success) {
+      alert(result.message);
+      localStorage.setItem("loggedIn", true);
+      localStorage.setItem("name", result.data.firstName);
+      setloggedIn(true);
+      return true;
+    } else {
+      alert(result.message);
+      localStorage.removeItem("name");
+      return false;
+    }
+  };
 
   const login = async (email, password) => {
     const result = await LoginUser(email, password);
@@ -23,11 +38,12 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.setItem("loggedIn", false);
+    localStorage.removeItem("name");
     setloggedIn(false);
   };
 
   return (
-    <AuthContext.Provider value={{ loggedIn, login, logout }}>
+    <AuthContext.Provider value={{ loggedIn, register, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

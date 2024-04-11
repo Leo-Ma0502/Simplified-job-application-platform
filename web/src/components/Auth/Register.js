@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Register.css";
 import { RegisterUser } from "../../utils/Auth";
+import { useAuth } from "../../utils/AuthContext";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -9,15 +10,13 @@ function Register() {
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
   const navigate = useNavigate();
+  const { register } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await RegisterUser(email, password, fname, lname);
-    if (result.success) {
-      alert(result.message);
+    const registerSuccess = await register(email, password, fname, lname);
+    if (registerSuccess) {
       navigate("/job");
-    } else {
-      alert(result.message);
     }
   };
 
