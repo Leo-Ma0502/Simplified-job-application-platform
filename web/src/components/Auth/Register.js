@@ -15,7 +15,7 @@ function Register() {
     const result = await RegisterUser(email, password, fname, lname);
     if (result.success) {
       alert(result.message);
-      navigate("/jobs");
+      navigate("/job");
     } else {
       alert(result.message);
     }
