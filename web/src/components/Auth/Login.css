@@ -42,6 +42,13 @@
     background-color: #0056b3;
 }
 
+.register-link {
+    display: flex;
+    margin-top: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
 @media (max-width: 768px) {
     .login-form {
         padding: 15px;

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Login.css";
 import { useAuth } from "../../utils/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -44,6 +44,9 @@ function Login() {
         <button type="submit" className="login-button">
           Login
         </button>
+        <div className="register-link">
+          <Link to={"/register"}>Create a new account</Link>
+        </div>
       </form>
     </div>
   );
