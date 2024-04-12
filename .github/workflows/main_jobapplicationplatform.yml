@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-backend:
     runs-on: windows-latest
 
     steps:
@@ -43,6 +43,39 @@ jobs:
           name: webapi
           path: ${{env.DOTNET_ROOT}}/backend-out
 
+  deploy-backend:
+    runs-on: windows-latest
+    needs: build
+    environment:
+      name: "Production"
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write #This is required for requesting the JWT
+
+    steps:
+      - name: download backend artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: webapi
+
+      - name: login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D4EF82D50CE147BAAB1BBCDFE7E030FF }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2F96278D97E248BAB1F14F464E19E3F5 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_AEB4FB7F943F4F809C6921A11731CD39 }}
+
+      - name: deploy backend
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "jobapplicationplatform"
+          slot-name: "backend"
+          package: .
+
+  build-frontend:
+    runs-on: windows-latest
+    steps:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
@@ -60,7 +93,7 @@ jobs:
           name: web
           path: web/build
 
-  deploy:
+  deploy-frontend:
     runs-on: windows-latest
     needs: build
     environment:
@@ -70,30 +103,10 @@ jobs:
       id-token: write #This is required for requesting the JWT
 
     steps:
-      - name: download backend artifact from build job
-        uses: actions/download-artifact@v3
-        with:
-          name: webapi
-
       - name: download frontend artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: web
-
-      - name: login to Azure
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D4EF82D50CE147BAAB1BBCDFE7E030FF }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2F96278D97E248BAB1F14F464E19E3F5 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_AEB4FB7F943F4F809C6921A11731CD39 }}
-
-      - name: deploy backend
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: "jobapplicationplatform"
-          slot-name: "backend"
-          package: .
 
       - name: deploy frontend
         uses: azure/webapps-deploy@v2
