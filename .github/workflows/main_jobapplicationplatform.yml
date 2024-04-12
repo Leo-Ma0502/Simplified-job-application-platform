@@ -37,7 +37,7 @@ jobs:
           cd backend
           dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/backend-out
 
-      - name: Upload backend artifact
+      - name: upload backend artifact
         uses: actions/upload-artifact@v3
         with:
           name: webapi
@@ -54,7 +54,7 @@ jobs:
           npm install
           npm run build
 
-      - name: Upload frontend artifact
+      - name: upload frontend artifact
         uses: actions/upload-artifact@v3
         with:
           name: web
@@ -70,34 +70,34 @@ jobs:
       id-token: write #This is required for requesting the JWT
 
     steps:
-      - name: Download backend artifact from build job
+      - name: download backend artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: webapi
 
-      - name: Download frontend artifact from build job
+      - name: download frontend artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: web
 
-      - name: Login to Azure
+      - name: login to Azure
         uses: azure/login@v1
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D4EF82D50CE147BAAB1BBCDFE7E030FF }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2F96278D97E248BAB1F14F464E19E3F5 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_AEB4FB7F943F4F809C6921A11731CD39 }}
 
-      - name: Deploy backend
+      - name: deploy backend
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: "jobapplicationplatform"
           slot-name: "backend"
-          package: webapi
+          package: ${{ github.workspace }}/Simplified-job-application-platform/webapi
 
-      - name: Deploy frontend
+      - name: deploy frontend
         uses: azure/webapps-deploy@v2
         with:
           app-name: "jobapplicationplatform"
           slot-name: "frontend"
-          package: web
+          package: ${{ github.workspace }}/Simplified-job-application-platform/web
