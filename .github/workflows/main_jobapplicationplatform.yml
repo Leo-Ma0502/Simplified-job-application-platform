@@ -80,9 +80,6 @@ jobs:
         with:
           name: web
 
-      - name: List downloaded files
-        run: ls -la "${{ github.workspace }}
-
       - name: login to Azure
         uses: azure/login@v1
         with:
@@ -90,17 +87,17 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2F96278D97E248BAB1F14F464E19E3F5 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_AEB4FB7F943F4F809C6921A11731CD39 }}
 
-      # - name: deploy backend
-      #   id: deploy-to-webapp
-      #   uses: azure/webapps-deploy@v2
-      #   with:
-      #     app-name: "jobapplicationplatform"
-      #     slot-name: "backend"
-      #     package: ${{ github.workspace }}/webapi
+      - name: deploy backend
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "jobapplicationplatform"
+          slot-name: "backend"
+          package: ./webapi
 
-      # - name: deploy frontend
-      #   uses: azure/webapps-deploy@v2
-      #   with:
-      #     app-name: "jobapplicationplatform"
-      #     slot-name: "frontend"
-      #     package: ${{ github.workspace }}/web
+      - name: deploy frontend
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "jobapplicationplatform"
+          slot-name: "frontend"
+          package: ./web
