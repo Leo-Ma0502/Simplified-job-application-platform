@@ -58,7 +58,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: web
-          path: ${{env.DOTNET_ROOT}}/frontend-out
+          path: web/build
 
   deploy:
     runs-on: windows-latest
