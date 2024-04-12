@@ -72,7 +72,7 @@ namespace WebApi.Tests.Unit
         }
 
         [Fact]
-        public async Task Register_WithValidUser_ReturnsCreatedAtAction()
+        public async Task Register_WithValidUser_ReturnsLoginSuccess()
         {
             // Arrange
             var mockService = new Mock<IUserService>();

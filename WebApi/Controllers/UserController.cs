@@ -56,20 +56,13 @@ namespace WebApi.Controllers
                     return BadRequest("Registration failed due to an unexpected error.");
                 }
 
-                newUser.Password = null;
-
-                var token = await _tokenService.GenerateToken(user);
-
-                var cookieOptions = new CookieOptions
+                LoginDTO loginDto = new LoginDTO()
                 {
-                    HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.Strict,
-                    Expires = DateTime.UtcNow.AddHours(1)
+                    Email = newUser.Email,
+                    Password = newUser.Password
                 };
-
-                Response.Cookies.Append("AuthToken", token, cookieOptions);
-
+                await Login(loginDto);
+                newUser.Password = null;
                 return CreatedAtAction(nameof(Get), new { id = newUser.UId }, newUser);
             }
             catch (Exception ex)
