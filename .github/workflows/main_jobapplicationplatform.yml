@@ -88,13 +88,13 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: "webapi"
+          app-name: "jobapplicationplatform"
           slot-name: "backend"
           package: ${{env.DOTNET_ROOT}}/backend-out
 
       - name: Deploy frontend
         uses: azure/webapps-deploy@v2
         with:
-          app-name: "web"
+          app-name: "jobapplicationplatform"
           slot-name: "frontend"
           package: ${{env.DOTNET_ROOT}}/frontend-out
