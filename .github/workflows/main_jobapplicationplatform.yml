@@ -34,7 +34,7 @@ jobs:
       - name: Upload backend artifact
         uses: actions/upload-artifact@v3
         with:
-          name: .net-app
+          name: webapi
           path: ${{env.DOTNET_ROOT}}/backend-out
 
       - name: Set up Node.js
@@ -54,7 +54,7 @@ jobs:
       - name: Upload frontend artifact
         uses: actions/upload-artifact@v3
         with:
-          name: frontend-artifact
+          name: web
           path: ${{env.DOTNET_ROOT}}/frontend-out
 
   deploy:
@@ -67,10 +67,15 @@ jobs:
       id-token: write #This is required for requesting the JWT
 
     steps:
-      - name: Download artifact from build job
+      - name: Download backend artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: .net-app
+          name: webapi
+
+      - name: Download frontend artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: web
 
       - name: Login to Azure
         uses: azure/login@v1
