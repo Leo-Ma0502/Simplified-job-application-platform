@@ -23,7 +23,9 @@ jobs:
           include-prerelease: true
 
       - name: Build backend
-        run: dotnet build --configuration Release
+        run: |
+          cd backend
+          dotnet build --configuration Release
 
       - name: Test backend
         run: dotnet test
@@ -44,7 +46,7 @@ jobs:
 
       - name: build frontend
         run: |
-          cd web
+          cd ../web
           npm install
           npm run build
 
