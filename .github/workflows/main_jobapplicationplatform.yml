@@ -39,7 +39,7 @@ jobs:
 
       - name: build frontend
         run: |
-          cd frontend
+          cd web
           dotnet build --configuration Release
 
       - name: publish frontend
