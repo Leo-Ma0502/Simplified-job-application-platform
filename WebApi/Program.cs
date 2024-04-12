@@ -22,8 +22,19 @@ builder.Services.AddScoped<IJobRepository, JobRepository>();
 
 builder.Services.AddSingleton<ITokenService, TokenService>();
 
+var connection = String.Empty;
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json");
+    connection = builder.Configuration.GetConnectionString("DefaultConnection");
+}
+else
+{
+    connection = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
+}
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+options.UseSqlServer(connection));
 
 builder.Services.AddCors(options =>
 {
