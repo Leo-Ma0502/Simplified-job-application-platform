@@ -28,7 +28,7 @@ jobs:
       - name: Test backend
         run: dotnet test
 
-      - name: public backend
+      - name: publish backend
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/backend-out
 
       - name: Upload backend artifact
@@ -41,7 +41,9 @@ jobs:
         run: |
           cd frontend
           dotnet build --configuration Release
-          dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/frontend-out
+
+      - name: publish frontend
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/frontend-out
 
       - name: Upload frontend artifact
         uses: actions/upload-artifact@v3
