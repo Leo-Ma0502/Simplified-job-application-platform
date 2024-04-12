@@ -93,7 +93,7 @@ jobs:
         with:
           app-name: "jobapplicationplatform"
           slot-name: "backend"
-          package: ${{env.DOTNET_ROOT}}/backend-out
+          package: webapi
 
       - name: Deploy frontend
         uses: azure/webapps-deploy@v2
