@@ -37,10 +37,16 @@ jobs:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/backend-out
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "21"
+
       - name: build frontend
         run: |
           cd web
-          dotnet build --configuration Release
+          npm install
+          npm run build
 
       - name: publish frontend
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/frontend-out
