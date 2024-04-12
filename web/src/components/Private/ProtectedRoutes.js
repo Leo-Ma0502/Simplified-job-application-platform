@@ -1,4 +1,4 @@
-import { Outlet, Navigate, createRoutesFromChildren } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 import { useAuth } from "../../utils/AuthContext";
 
 function PrivateRoutes() {
