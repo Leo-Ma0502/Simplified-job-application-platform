@@ -62,3 +62,5 @@ jobs:
           app-name: "JobApplicationWeb"
           slot-name: "Production"
           package: .
+        env:
+          REACT_APP_API_BASE_URL: ${{ secrets.REACT_APP_API_BASE_URL}}
