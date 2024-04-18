@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const JobDetail = ({ job }) => {
   if (!job) return null;
@@ -11,6 +12,7 @@ const JobDetail = ({ job }) => {
       <p>Location: {job.location}</p>
       <p>Posted: {job.postDate}</p>
       <p>Description: {job.description}</p>
+      <Link to={"/apply"}>Apply</Link>
     </div>
   );
 };

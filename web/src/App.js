@@ -1,14 +1,11 @@
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./utils/AuthContext";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 import Header from "./components/Layout/Header";
 import Footer from "./components/Layout/Footer";
 import JobListing from "./components/Jobs/JobListing";
+import Apply from "./components/Jobs/Apply";
 import PrivateRoutes from "./components/Private/ProtectedRoutes";
 import "./App.css";
 
@@ -25,6 +22,7 @@ function App() {
               <Route path="/" element={<Login />} />
               <Route element={<PrivateRoutes />}>
                 <Route path="/job" element={<JobListing />} />
+                <Route path="/apply" element={<Apply />} />
               </Route>
             </Routes>
           </div>
