@@ -1,19 +1,22 @@
 .joblisting-container {
-    font-family: "Arial, sans-serif";
+    height: 100%;
 }
 
-.joblisting-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background-color: #f5f5f5;
-    border-bottom: 1px solid #ccc;
+.logout-button {
+    background-color: "#bc3bae";
+    color: "white";
+    padding: "10px 20px";
+    margin: "10px";
+    border: "none";
+    border-radius: "5px";
+    cursor: "pointer";
+    transition: "all 0.3s ease-out";
 }
 
-.joblisting-button {
-    background-color: #4CAF50;
-    color: white;
+
+.joblisting-detail div button {
+    background-color: #bc3bae;
+    color: #fdfdfd;
     padding: 10px 20px;
     margin: 10px;
     border: none;
@@ -38,18 +41,32 @@
     cursor: pointer;
     margin-top: 10px;
     margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
+    padding: 20px;
+    border: 1px solid #bc3bae;
     border-radius: 5px;
+    background-color: #281b3f;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease-in-out;
+}
+
+.joblisting-item:hover {
+    background-color: #898192;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .joblisting-item-selected {
-    background-color: #e6e6e6;
+    background-color: #898192;
 }
 
 .joblisting-detail {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 20px;
     flex: 1;
     text-align: center;
+    background-color: #fdfdfd;
+    color: #281b3f;
 }
 
 @media (max-width: 768px) {
