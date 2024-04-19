@@ -19,10 +19,11 @@ function App() {
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/" element={<Login />} />
+              <Route path="/" element={<JobListing />} />
+              <Route path="/job" element={<JobListing />} />
+              <Route path="/apply" element={<Apply />} />
               <Route element={<PrivateRoutes />}>
-                <Route path="/job" element={<JobListing />} />
-                <Route path="/apply" element={<Apply />} />
+                {/* protected routes here */}
               </Route>
             </Routes>
           </div>
