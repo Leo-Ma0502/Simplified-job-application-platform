@@ -4,15 +4,17 @@ import { LoginUser, RegisterUser } from "../utils/Auth";
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [loggedIn, setloggedIn] = useState(localStorage.getItem("loggedIn"));
+  const [loggedIn, setloggedIn] = useState(
+    localStorage.getItem("loggedIn") === "true"
+  );
 
   const register = async (email, password, fname, lname) => {
     const result = await RegisterUser(email, password, fname, lname);
     if (result.success) {
       alert(result.message);
-      localStorage.setItem("loggedIn", true);
+      localStorage.setItem("loggedIn", "true");
       localStorage.setItem("name", result.data.firstName);
-      setloggedIn(true);
+      setloggedIn(localStorage.getItem("loggedIn") === "true");
       return true;
     } else {
       alert(result.message);
@@ -25,9 +27,9 @@ export const AuthProvider = ({ children }) => {
     const result = await LoginUser(email, password);
     if (result.success) {
       alert(result.message);
-      localStorage.setItem("loggedIn", true);
+      localStorage.setItem("loggedIn", "true");
       localStorage.setItem("name", result.name);
-      setloggedIn(true);
+      setloggedIn(localStorage.getItem("loggedIn") === "true");
       return true;
     } else {
       alert(result.message);
@@ -37,7 +39,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.setItem("loggedIn", false);
+    localStorage.setItem("loggedIn", "false");
     localStorage.removeItem("name");
     setloggedIn(false);
   };
