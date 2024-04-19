@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAuth } from "../../utils/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import Logout from "../Auth/Logout";
 import JobItem from "./JobItem";
 import JobDetail from "./JobDetail";
@@ -41,7 +41,7 @@ function JobListing() {
   return (
     <div className="joblisting-container">
       <div className="joblisting-header">
-        {loggedIn === true ? (
+        {loggedIn ? (
           <div>
             <h1>Welcome, {localStorage.getItem("name")}</h1>
             <Logout />
@@ -81,7 +81,6 @@ function JobListing() {
         >
           {showDetail ? (
             <div>
-              {" "}
               <JobDetail job={selectedJob} />
               <button onClick={handleCloseDetail}>Close</button>
             </div>

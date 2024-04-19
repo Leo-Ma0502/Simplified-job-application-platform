@@ -1,20 +1,25 @@
-const Apply = ({ job }) => {
+import React from "react";
+import withAuth from "../../HOC/withAuth";
+
+const Apply = ({ onClick }) => {
   return (
-    <a
-      href={`mailto:${job.email}?subject=Application for ${job.title}&body=Hi, I am interested in the position advertised.`}
+    <button
       style={{
-        display: "inline-block",
-        padding: "10px 20px",
-        margin: "10px 0",
         backgroundColor: "#4CAF50",
         color: "white",
+        padding: "10px 20px",
+        border: "none",
         borderRadius: "5px",
-        textDecoration: "none",
+        cursor: "pointer",
+        transition: "all 0.3s ease-out",
       }}
+      onClick={onClick}
     >
-      Apply by Email
-    </a>
+      Apply
+    </button>
   );
 };
 
-export default Apply;
+const ApplyWithAuth = withAuth(Apply);
+
+export default ApplyWithAuth;
