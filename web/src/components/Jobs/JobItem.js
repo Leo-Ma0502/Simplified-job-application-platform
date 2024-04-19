@@ -9,10 +9,8 @@ const JobItem = ({ jobTitle, jobLocation, postDate }) => {
   return (
     <div
       style={{
-        padding: "10px",
-        margin: "10px",
-        border: "1px solid #ccc",
-        borderRadius: "5px",
+        alignContent: "center",
+        color: "#fdfdfd",
       }}
     >
       <h2>{jobTitle}</h2>

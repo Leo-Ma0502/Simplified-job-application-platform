@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { useAuth } from "../../contexts/AuthContext";
-import Logout from "../Auth/Logout";
 import JobItem from "./JobItem";
 import JobDetail from "./JobDetail";
 import "./JobListing.css";
@@ -8,7 +6,6 @@ import "./JobListing.css";
 function JobListing() {
   const [selectedJob, setSelectedJob] = useState(null);
   const [showDetail, setShowDetail] = useState(false);
-  const { loggedIn } = useAuth();
 
   const handleJobClick = (job) => {
     setSelectedJob(job);
@@ -40,19 +37,6 @@ function JobListing() {
 
   return (
     <div className="joblisting-container">
-      <div className="joblisting-header">
-        {loggedIn ? (
-          <div>
-            <h1>Welcome, {localStorage.getItem("name")}</h1>
-            <Logout />
-          </div>
-        ) : (
-          <div>
-            <button className="joblisting-button">Login</button>
-            <button className="joblisting-button">Register</button>
-          </div>
-        )}
-      </div>
       <div className="joblisting-body">
         <div className="joblisting-list">
           {jobs.map((job) => (

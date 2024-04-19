@@ -12,8 +12,8 @@ const Logout = () => {
   };
 
   const logoutButtonStyle = {
-    backgroundColor: "#4CAF50",
-    color: "white",
+    backgroundColor: "#bc3bae",
+    color: "#fdfdfd",
     padding: "10px 20px",
     margin: "10px",
     border: "none",

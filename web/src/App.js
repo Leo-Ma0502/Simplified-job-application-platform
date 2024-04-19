@@ -7,6 +7,7 @@ import Footer from "./components/Layout/Footer";
 import JobListing from "./components/Jobs/JobListing";
 import Apply from "./components/Jobs/Apply";
 import PrivateRoutes from "./components/Private/ProtectedRoutes";
+import NavigationBar from "./components/Layout/NavigationBar";
 import "./App.css";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
       <Router>
         <div className="app-container">
           <Header />
+          <NavigationBar />
           <div className="content">
             <Routes>
               <Route path="/login" element={<Login />} />
