@@ -1,10 +1,10 @@
 import { Outlet, Navigate } from "react-router-dom";
-import { useAuth } from "../../utils/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 function PrivateRoutes() {
   const { loggedIn } = useAuth();
-  console.log("....", loggedIn);
-  return loggedIn ? <Outlet /> : <Navigate to="/login" />;
+  console.log("login status: ", loggedIn);
+  return loggedIn === true ? <Outlet /> : <Navigate to="/login" />;
 }
 
 export default PrivateRoutes;

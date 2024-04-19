@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import "./Login.css";
-import { useAuth } from "../../utils/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const loginSuccess = await login(email, password);
     if (loginSuccess) {
-      navigate("/job");
+      navigate(location.state?.from?.pathname || "/", { replace: true });
     }
   };
 
