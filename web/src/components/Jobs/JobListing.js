@@ -1,13 +1,22 @@
+import React, { useState } from "react";
+import { useAuth } from "../../utils/AuthContext";
 import Logout from "../Auth/Logout";
 import JobItem from "./JobItem";
 import JobDetail from "./JobDetail";
-import { useState } from "react";
+import "./JobListing.css";
 
 function JobListing() {
   const [selectedJob, setSelectedJob] = useState(null);
+  const [showDetail, setShowDetail] = useState(false);
+  const { loggedIn } = useAuth();
 
   const handleJobClick = (job) => {
     setSelectedJob(job);
+    setShowDetail(true);
+  };
+
+  const handleCloseDetail = () => {
+    setShowDetail(false);
   };
 
   const jobs = [
@@ -30,41 +39,31 @@ function JobListing() {
   ];
 
   return (
-    <div style={{ fontFamily: "Arial, sans-serif" }}>
-      {/* Header with Welcome and Logout */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "20px",
-          backgroundColor: "#f5f5f5",
-          borderBottom: "1px solid #ccc",
-        }}
-      >
-        <h1>Welcome, {localStorage.getItem("name")}</h1>
-        <Logout />
+    <div className="joblisting-container">
+      <div className="joblisting-header">
+        {loggedIn === true ? (
+          <div>
+            <h1>Welcome, {localStorage.getItem("name")}</h1>
+            <Logout />
+          </div>
+        ) : (
+          <div>
+            <button className="joblisting-button">Login</button>
+            <button className="joblisting-button">Register</button>
+          </div>
+        )}
       </div>
-
-      {/* Main content area with job list and details */}
-      <div style={{ display: "flex", padding: "20px" }}>
-        {/* Job list */}
-        <div style={{ flex: 1, marginRight: "20px" }}>
+      <div className="joblisting-body">
+        <div className="joblisting-list">
           {jobs.map((job) => (
             <div
               key={job.id}
+              className={`joblisting-item ${
+                selectedJob && selectedJob.id === job.id
+                  ? "joblisting-item-selected"
+                  : ""
+              }`}
               onClick={() => handleJobClick(job)}
-              style={{
-                cursor: "pointer",
-                marginBottom: "10px",
-                padding: "10px",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                backgroundColor:
-                  selectedJob && selectedJob.id === job.id
-                    ? "#e6e6e6"
-                    : "white",
-              }}
             >
               <JobItem
                 jobTitle={job.title}
@@ -74,9 +73,21 @@ function JobListing() {
             </div>
           ))}
         </div>
-        {/* Job details */}
-        <div style={{ flex: 2 }}>
-          <JobDetail job={selectedJob} />
+
+        <div
+          className={`joblisting-detail ${
+            showDetail ? "joblisting-detail-active" : ""
+          }`}
+        >
+          {showDetail ? (
+            <div>
+              {" "}
+              <JobDetail job={selectedJob} />
+              <button onClick={handleCloseDetail}>Close</button>
+            </div>
+          ) : (
+            <p>Click job card to view details</p>
+          )}
         </div>
       </div>
     </div>
