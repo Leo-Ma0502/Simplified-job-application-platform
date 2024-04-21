@@ -9,6 +9,7 @@ namespace WebApi.Models
         public string Title { get; set; }
         public string Location { get; set; }
         public int Opening { get; set; }
+        public string Contact { get; set; }
         public string Description { get; set; }
         public string Requirements { get; set; }
         public string Responsibilities { get; set; }
