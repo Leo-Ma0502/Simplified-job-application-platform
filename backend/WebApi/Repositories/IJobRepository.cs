@@ -11,5 +11,8 @@ namespace WebApi.Repositories
         Task AddAsync(Job job);
         Task UpdateAsync(Job job);
         Task DeleteAsync(int id);
+        Task<List<Job>> GetJobsByKeywordAsync(string keywords);
+        Task<List<Job>> GetJobsByIndustryAsync(string keywords);
+        Task<List<Job>> GetJobsByTitleAsync(string keywords);
     }
 }

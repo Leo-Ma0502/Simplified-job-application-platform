@@ -11,5 +11,6 @@ namespace WebApi.Services
         Task CreateJobAsync(Job job);
         Task UpdateJobAsync(Job job);
         Task DeleteJobAsync(int id);
+        Task<List<Job>> SearchJobsAsync(string keyword, string industry, string title);
     }
 }

@@ -23,5 +23,31 @@ namespace WebApi.Services
         public async Task UpdateJobAsync(Job job) => await _jobRepository.UpdateAsync(job);
 
         public async Task DeleteJobAsync(int id) => await _jobRepository.DeleteAsync(id);
+
+        public async Task<List<Job>> SearchJobsAsync(string keyword, string industry, string title)
+        {
+            List<Job> result = new List<Job>();
+
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                var jobsByKeyword = await _jobRepository.GetJobsByKeywordAsync(keyword);
+                result.AddRange(jobsByKeyword);
+            }
+
+            if (!string.IsNullOrEmpty(industry))
+            {
+                var jobsByIndustry = await _jobRepository.GetJobsByIndustryAsync(industry);
+                result.AddRange(jobsByIndustry);
+            }
+
+            if (!string.IsNullOrEmpty(title))
+            {
+                var jobsByTitle = await _jobRepository.GetJobsByTitleAsync(title);
+                result.AddRange(jobsByTitle);
+            }
+
+            return result;
+        }
+
     }
 }

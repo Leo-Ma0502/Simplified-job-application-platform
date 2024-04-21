@@ -58,5 +58,12 @@ namespace WebApi.Controllers
             await _jobService.DeleteJobAsync(id);
             return NoContent();
         }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchJobs([FromQuery] string keyword = null, [FromQuery] string industry = null, [FromQuery] string title = null)
+        {
+            var job = await _jobService.SearchJobsAsync(keyword, industry, title);
+            return Ok(job);
+        }
     }
 }

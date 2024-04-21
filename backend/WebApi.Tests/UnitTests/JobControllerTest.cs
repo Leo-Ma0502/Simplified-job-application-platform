@@ -52,5 +52,27 @@ namespace WebApi.Tests.Unit
             var actionResult = Assert.IsType<ActionResult<Job>>(result);
             Assert.IsType<NotFoundResult>(actionResult.Result);
         }
+
+        [Fact]
+        public async Task SearchJobs_ReturnsJobsByKeyword()
+        {
+            // Arrange
+            var mockService = new Mock<IJobService>();
+            mockService.Setup(service => service.SearchJobsAsync("keyword", null, null))
+                .ReturnsAsync(new List<Job>
+                {
+                    new Job { JId = 1, Title = "Job 1" },
+                    new Job { JId = 2, Title = "Job 2" }
+                });
+            var controller = new JobController(mockService.Object);
+
+            // Act
+            var result = await controller.SearchJobs("keyword", null, null);
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var jobs = Assert.IsAssignableFrom<IEnumerable<Job>>(okResult.Value);
+            Assert.Equal(2, jobs.Count());
+        }
     }
 }
