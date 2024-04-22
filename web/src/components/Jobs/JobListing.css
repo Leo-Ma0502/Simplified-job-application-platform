@@ -90,8 +90,9 @@
         display: block;
         position: fixed;
         min-width: 150px;
-        bottom: 20%;
         right: 0;
+        left: 0;
+        top: 20%;
         border: 3px solid #f1f1f1;
         z-index: 1;
         background-color: #fdfdfd;
