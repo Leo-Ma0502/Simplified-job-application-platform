@@ -22,11 +22,11 @@ const JobDetail = ({ job }) => {
       <h3>{job.title}</h3>
       <p>Location: {job.location}</p>
       <p>
-        Posted:{" "}
+        Posted:
         {formatDistanceToNow(parseISO(job.postdate), { addSuffix: true })}
       </p>
       <p>
-        Application closes:{" "}
+        Application closes:
         {formatDistanceToNow(parseISO(job.deadline), { addSuffix: true })}
       </p>
       <p>
