@@ -16,6 +16,23 @@ namespace WebApi.Services
 
         public async Task<IEnumerable<Job>> GetAllJobsAsync() => await _jobRepository.GetAllAsync();
 
+        public async Task<IEnumerable<Job>> GetJobsAsync(int page, int pageSize)
+        {
+            var _jobs = await GetAllJobsAsync();
+            if (page < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(page), "Page number must be greater than or equal to 1.");
+            }
+
+            if (pageSize < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(pageSize), "Page size must be greater than or equal to 1.");
+            }
+
+            var jobs = _jobs.Skip((page - 1) * pageSize).Take(pageSize);
+            return await Task.FromResult(jobs);
+        }
+
         public async Task<Job> GetJobByIdAsync(int id) => await _jobRepository.GetByIdAsync(id);
 
         public async Task CreateJobAsync(Job job) => await _jobRepository.AddAsync(job);
@@ -24,9 +41,19 @@ namespace WebApi.Services
 
         public async Task DeleteJobAsync(int id) => await _jobRepository.DeleteAsync(id);
 
-        public async Task<List<Job>> SearchJobsAsync(string keyword, string industry, string title)
+        public async Task<List<Job>> SearchJobsAsync(int page, string keyword, string industry, string title, int pageSize)
         {
             List<Job> result = new List<Job>();
+
+            if (page < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(page), "Page number must be greater than or equal to 1.");
+            }
+
+            if (pageSize < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(pageSize), "Page size must be greater than or equal to 1.");
+            }
 
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -46,7 +73,7 @@ namespace WebApi.Services
                 result.AddRange(jobsByTitle);
             }
 
-            return result;
+            return result.Skip((page - 1) * pageSize).Take(pageSize).ToList();
         }
 
     }

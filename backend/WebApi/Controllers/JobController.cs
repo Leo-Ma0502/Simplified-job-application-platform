@@ -18,7 +18,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Job>>> GetJobs() => Ok(await _jobService.GetAllJobsAsync());
+        public async Task<ActionResult<IEnumerable<Job>>> GetJobs(int page, int pageSize = 10) => Ok(await _jobService.GetJobsAsync(page, pageSize));
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Job>> GetJob(int id)
@@ -60,9 +60,9 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<IActionResult> SearchJobs([FromQuery] string keyword = null, [FromQuery] string industry = null, [FromQuery] string title = null)
+        public async Task<IActionResult> SearchJobs([FromQuery] int page, [FromQuery] string keyword = null, [FromQuery] string industry = null, [FromQuery] string title = null, int pageSize = 10)
         {
-            var job = await _jobService.SearchJobsAsync(keyword, industry, title);
+            var job = await _jobService.SearchJobsAsync(page, keyword, industry, title, pageSize);
             return Ok(job);
         }
     }

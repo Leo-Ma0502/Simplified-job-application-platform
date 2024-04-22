@@ -58,7 +58,7 @@ namespace WebApi.Tests.Unit
         {
             // Arrange
             var mockService = new Mock<IJobService>();
-            mockService.Setup(service => service.SearchJobsAsync("keyword", null, null))
+            mockService.Setup(service => service.SearchJobsAsync(1, "keyword", null, null, 10))
                 .ReturnsAsync(new List<Job>
                 {
                     new Job { JId = 1, Title = "Job 1" },
@@ -67,7 +67,7 @@ namespace WebApi.Tests.Unit
             var controller = new JobController(mockService.Object);
 
             // Act
-            var result = await controller.SearchJobs("keyword", null, null);
+            var result = await controller.SearchJobs(1, "keyword", null, null);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
