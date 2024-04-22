@@ -40,5 +40,26 @@ namespace WebApi.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<List<Job>> GetJobsByKeywordAsync(string keyword)
+        {
+            return await _context.Jobs
+                .Where(job => job.JobKeywords.Any(jk => jk.Keyword.KName.Contains(keyword)))
+                .ToListAsync();
+        }
+
+        public async Task<List<Job>> GetJobsByIndustryAsync(string industry)
+        {
+            return await _context.Jobs
+                .Where(job => job.JobIndustries.Any(ji => ji.Industry.IName.Contains(industry)))
+                .ToListAsync();
+        }
+
+        public async Task<List<Job>> GetJobsByTitleAsync(string title)
+        {
+            return await _context.Jobs
+                .Where(job => job.Title.Contains(title))
+                .ToListAsync();
+        }
     }
 }

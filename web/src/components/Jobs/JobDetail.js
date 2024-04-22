@@ -1,5 +1,6 @@
 import React from "react";
 import ApplyWithAuth from "./Apply";
+import { formatDistanceToNow, parseISO } from "date-fns";
 
 const JobDetail = ({ job }) => {
   if (!job) return null;
@@ -20,8 +21,18 @@ const JobDetail = ({ job }) => {
     <div style={{ padding: "20px", borderRadius: "8px" }}>
       <h3>{job.title}</h3>
       <p>Location: {job.location}</p>
-      <p>Posted: {job.postDate}</p>
-      <p>Description: {job.description}</p>
+      <p>
+        Posted:
+        {formatDistanceToNow(parseISO(job.postdate), { addSuffix: true })}
+      </p>
+      <p>
+        Application closes:
+        {formatDistanceToNow(parseISO(job.deadline), { addSuffix: true })}
+      </p>
+      <p>
+        Description:
+        {job.description}
+      </p>
       <ApplyWithAuth onClick={handleApply} />
     </div>
   );

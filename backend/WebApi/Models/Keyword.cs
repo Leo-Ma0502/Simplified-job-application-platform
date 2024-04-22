@@ -8,7 +8,7 @@ namespace WebApi.Models
         [Key]
         public int KId { get; set; }
         public string KName { get; set; }
-        public List<JobKeyword> JobKeywords { get; set; } = new List<JobKeyword>();
+        public virtual ICollection<JobKeyword> JobKeywords { get; set; } = new List<JobKeyword>();
     }
 
 }

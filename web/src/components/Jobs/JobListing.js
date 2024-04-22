@@ -1,11 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import JobItem from "./JobItem";
 import JobDetail from "./JobDetail";
 import "./JobListing.css";
+import { fetchJobs } from "../../services/jobService";
 
 function JobListing() {
   const [selectedJob, setSelectedJob] = useState(null);
   const [showDetail, setShowDetail] = useState(false);
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
+  useEffect(() => {
+    const getJobs = async () => {
+      setLoading(true);
+      try {
+        const jobsData = await fetchJobs(page, 2);
+        if (jobsData.length === 0) {
+          setHasMore(false);
+        } else {
+          setJobs((prevJobs) => {
+            const newJobs = jobsData.filter(
+              (job) => !prevJobs.some((prevJob) => prevJob.jId === job.jId)
+            );
+            return [...prevJobs, ...newJobs];
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getJobs();
+  }, [page]);
+
+  const handleScroll = () => {
+    if (
+      window.innerHeight + window.scrollY >= document.body.offsetHeight &&
+      !loading &&
+      hasMore
+    ) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
 
   const handleJobClick = (job) => {
     setSelectedJob(job);
@@ -16,46 +55,31 @@ function JobListing() {
     setShowDetail(false);
   };
 
-  const jobs = [
-    {
-      id: 1,
-      title: "Software Engineer",
-      location: "New York, NY",
-      postDate: "2023-04-16T14:00:00Z",
-      description:
-        "This is a software engineer position focusing on backend development.",
-    },
-    {
-      id: 2,
-      title: "Software Engineer 2",
-      location: "New York, NY",
-      postDate: "2023-04-16T14:00:00Z",
-      description:
-        "This is another software engineer position focusing on backend development.",
-    },
-  ];
-
   return (
     <div className="joblisting-container">
       <div className="joblisting-body">
-        <div className="joblisting-list">
-          {jobs.map((job) => (
-            <div
-              key={job.id}
-              className={`joblisting-item ${
-                selectedJob && selectedJob.id === job.id
-                  ? "joblisting-item-selected"
-                  : ""
-              }`}
-              onClick={() => handleJobClick(job)}
-            >
-              <JobItem
-                jobTitle={job.title}
-                jobLocation={job.location}
-                postDate={job.postDate}
-              />
-            </div>
-          ))}
+        <div className="joblisting-list" onScroll={handleScroll}>
+          {jobs.length !== 0 &&
+            jobs.map((job) => (
+              <div
+                key={job.jId}
+                className={`joblisting-item ${
+                  selectedJob && selectedJob.jId === job.jId
+                    ? "joblisting-item-selected"
+                    : ""
+                }`}
+                onClick={() => handleJobClick(job)}
+              >
+                {job && (
+                  <JobItem
+                    jobTitle={job.title}
+                    jobLocation={job.location}
+                    postDate={job.postdate}
+                  />
+                )}
+              </div>
+            ))}
+          <p>No more jobs available</p>
         </div>
 
         <div
