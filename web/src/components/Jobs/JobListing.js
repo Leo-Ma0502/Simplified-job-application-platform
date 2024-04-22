@@ -16,7 +16,7 @@ function JobListing() {
     const getJobs = async () => {
       setLoading(true);
       try {
-        const jobsData = await fetchJobs(page, 2);
+        const jobsData = await fetchJobs(page, 5);
         if (jobsData.length === 0) {
           setHasMore(false);
         } else {
