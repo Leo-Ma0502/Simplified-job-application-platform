@@ -30,15 +30,7 @@ const JobDetail = ({ job }) => {
         {formatDistanceToNow(parseISO(job.deadline), { addSuffix: true })}
       </p>
       <p>
-        Description: kjhgfdtgfhgjhjkjkhgv kjhgfdtgfhgjhjkjkhgv
-        kjhgfdtgfhgjhjkjkhgv kjhgfdtgfhgjhjkjkhgv kjhgfdtgfhgjhjkjkhgv
-        kjhgfdtgfhgjhjkjkhgv kjhgfdtgfhgjhjkjkhgv kjhgfdtgfhgjhjkjkhgv
-        kjhgfdtgfhgjhjkjkhgv kjhgfdtgfhgjhjkjkhgv kjhgfdtgfhgjhjkjkhgv
-        kjhgfdtgfhgjhjkjkhgv kjhgfdtgfhgjhjkjkhgv kjhgfdtgfhgjhjkjkhgv
-        kjhgfdtgfhgjhjkjkhgv kjhgfdtgfhgjhjkjkhgv kjhgfdtgfhgjhjkjkhgv
-        kjhgfdtgfhgjhjkjkhgv kjhgfdtgfhgjhjkjkhgv kjhgfdtgfhgjhjkjkhgv
-        kjhgfdtgfhgjhjkjkhgv kjhgfdtgfhgjhjkjkhgv kjhgfdtgfhgjhjkjkhgv
-        kjhgfdtgfhgjhjkjkhgvg
+        Description:
         {job.description}
       </p>
       <ApplyWithAuth onClick={handleApply} />
