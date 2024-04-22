@@ -12,28 +12,29 @@ function JobListing() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  const getJobs = async () => {
-    console.log("getting jobs");
-    setLoading(true);
-    try {
-      const jobsData = await fetchJobs(page, 2);
-      if (jobsData.length === 0) {
-        setHasMore(false);
-      } else {
-        setJobs((prevJobs) => {
-          const newJobs = jobsData.filter(
-            (job) => !prevJobs.some((prevJob) => prevJob.jId === job.jId)
-          );
-          return [...prevJobs, ...newJobs];
-        });
-        setPage((prevPage) => prevPage + 1);
+  useEffect(() => {
+    const getJobs = async () => {
+      setLoading(true);
+      try {
+        const jobsData = await fetchJobs(page, 2);
+        if (jobsData.length === 0) {
+          setHasMore(false);
+        } else {
+          setJobs((prevJobs) => {
+            const newJobs = jobsData.filter(
+              (job) => !prevJobs.some((prevJob) => prevJob.jId === job.jId)
+            );
+            return [...prevJobs, ...newJobs];
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+    getJobs();
+  }, [page]);
 
   const handleScroll = () => {
     if (
@@ -41,21 +42,9 @@ function JobListing() {
       !loading &&
       hasMore
     ) {
-      fetchJobs();
+      setPage((prevPage) => prevPage + 1);
     }
   };
-
-  useEffect(() => {
-    console.log("loading");
-    getJobs();
-  }, [page]);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [jobs, loading]);
 
   const handleJobClick = (job) => {
     setSelectedJob(job);
@@ -69,17 +58,9 @@ function JobListing() {
   return (
     <div className="joblisting-container">
       <div className="joblisting-body">
-        {loading ? (
-          <div className="joblisting-list">
-            <p></p>loading...
-          </div>
-        ) : jobs.length === 0 ? (
-          <div className="joblisting-list">
-            <p>No jobs available</p>
-          </div>
-        ) : (
-          <div className="joblisting-list">
-            {jobs.map((job) => (
+        <div className="joblisting-list" onScroll={handleScroll}>
+          {jobs.length !== 0 &&
+            jobs.map((job) => (
               <div
                 key={job.jId}
                 className={`joblisting-item ${
@@ -89,15 +70,18 @@ function JobListing() {
                 }`}
                 onClick={() => handleJobClick(job)}
               >
-                <JobItem
-                  jobTitle={job.title}
-                  jobLocation={job.location}
-                  postDate={job.postdate}
-                />
+                {job && (
+                  <JobItem
+                    jobTitle={job.title}
+                    jobLocation={job.location}
+                    postDate={job.postdate}
+                  />
+                )}
               </div>
             ))}
-          </div>
-        )}
+          <p>No more jobs available</p>
+        </div>
+
         <div
           className={`joblisting-detail ${
             showDetail ? "joblisting-detail-active" : ""
