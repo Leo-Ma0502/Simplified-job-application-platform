@@ -10,19 +10,24 @@ function JobListing() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   const getJobs = async () => {
     console.log("getting jobs");
     setLoading(true);
     try {
       const jobsData = await fetchJobs(page, 2);
-      setJobs((prevJobs) => {
-        const newJobs = jobsData.filter(
-          (job) => !prevJobs.some((prevJob) => prevJob.jId === job.jId)
-        );
-        return [...prevJobs, ...newJobs];
-      });
-      console.log(jobs);
+      if (jobsData.length === 0) {
+        setHasMore(false);
+      } else {
+        setJobs((prevJobs) => {
+          const newJobs = jobsData.filter(
+            (job) => !prevJobs.some((prevJob) => prevJob.jId === job.jId)
+          );
+          return [...prevJobs, ...newJobs];
+        });
+        setPage((prevPage) => prevPage + 1);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -30,10 +35,27 @@ function JobListing() {
     }
   };
 
+  const handleScroll = () => {
+    if (
+      window.innerHeight + window.scrollY >= document.body.offsetHeight &&
+      !loading &&
+      hasMore
+    ) {
+      fetchJobs();
+    }
+  };
+
   useEffect(() => {
     console.log("loading");
     getJobs();
   }, [page]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [jobs, loading]);
 
   const handleJobClick = (job) => {
     setSelectedJob(job);
@@ -74,14 +96,6 @@ function JobListing() {
                 />
               </div>
             ))}
-
-            <button
-              onClick={() => {
-                setPage((prev) => prev + 1);
-              }}
-            >
-              Load More
-            </button>
           </div>
         )}
         <div
