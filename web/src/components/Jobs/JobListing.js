@@ -1,11 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import JobItem from "./JobItem";
 import JobDetail from "./JobDetail";
 import "./JobListing.css";
+import { fetchJobs } from "../../services/jobService";
 
 function JobListing() {
   const [selectedJob, setSelectedJob] = useState(null);
   const [showDetail, setShowDetail] = useState(false);
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+
+  const getJobs = async () => {
+    console.log("getting jobs");
+    setLoading(true);
+    try {
+      const jobsData = await fetchJobs(page, 2);
+      setJobs((prevJobs) => {
+        const newJobs = jobsData.filter(
+          (job) => !prevJobs.some((prevJob) => prevJob.jId === job.jId)
+        );
+        return [...prevJobs, ...newJobs];
+      });
+      console.log(jobs);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    console.log("loading");
+    getJobs();
+  }, [page]);
 
   const handleJobClick = (job) => {
     setSelectedJob(job);
@@ -16,48 +44,46 @@ function JobListing() {
     setShowDetail(false);
   };
 
-  const jobs = [
-    {
-      id: 1,
-      title: "Software Engineer",
-      location: "New York, NY",
-      postDate: "2023-04-16T14:00:00Z",
-      description:
-        "This is a software engineer position focusing on backend development.",
-    },
-    {
-      id: 2,
-      title: "Software Engineer 2",
-      location: "New York, NY",
-      postDate: "2023-04-16T14:00:00Z",
-      description:
-        "This is another software engineer position focusing on backend development.",
-    },
-  ];
-
   return (
     <div className="joblisting-container">
       <div className="joblisting-body">
-        <div className="joblisting-list">
-          {jobs.map((job) => (
-            <div
-              key={job.id}
-              className={`joblisting-item ${
-                selectedJob && selectedJob.id === job.id
-                  ? "joblisting-item-selected"
-                  : ""
-              }`}
-              onClick={() => handleJobClick(job)}
-            >
-              <JobItem
-                jobTitle={job.title}
-                jobLocation={job.location}
-                postDate={job.postDate}
-              />
-            </div>
-          ))}
-        </div>
+        {loading ? (
+          <div className="joblisting-list">
+            <p></p>loading...
+          </div>
+        ) : jobs.length === 0 ? (
+          <div className="joblisting-list">
+            <p>No jobs available</p>
+          </div>
+        ) : (
+          <div className="joblisting-list">
+            {jobs.map((job) => (
+              <div
+                key={job.jId}
+                className={`joblisting-item ${
+                  selectedJob && selectedJob.jId === job.jId
+                    ? "joblisting-item-selected"
+                    : ""
+                }`}
+                onClick={() => handleJobClick(job)}
+              >
+                <JobItem
+                  jobTitle={job.title}
+                  jobLocation={job.location}
+                  postDate={job.postdate}
+                />
+              </div>
+            ))}
 
+            <button
+              onClick={() => {
+                setPage((prev) => prev + 1);
+              }}
+            >
+              Load More
+            </button>
+          </div>
+        )}
         <div
           className={`joblisting-detail ${
             showDetail ? "joblisting-detail-active" : ""
