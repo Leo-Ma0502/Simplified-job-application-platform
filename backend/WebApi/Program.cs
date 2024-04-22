@@ -20,6 +20,12 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJobService, JobService>();
 builder.Services.AddScoped<IJobRepository, JobRepository>();
 
+builder.Services.AddScoped<IJobIndustryService, JobIndustryService>();
+builder.Services.AddScoped<IJobIndustryRepository, JobIndustryRepository>();
+
+builder.Services.AddScoped<IJobKeywordService, JobKeywordService>();
+builder.Services.AddScoped<IJobKeywordRepository, JobKeywordRepository>();
+
 builder.Services.AddSingleton<ITokenService, TokenService>();
 
 var connection = String.Empty;
