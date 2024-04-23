@@ -10,7 +10,7 @@ export const fetchJobs = async (
   }`;
   const cachedJobs = sessionStorage.getItem(key);
   const endpoint =
-    !!industry.trim() || !!title.trim()
+    !!industry || !!title
       ? `${process.env.REACT_APP_API_BASE_URL}/job/search?page=${page}&pagesize=${pageSize}&industry=${industry}&title=${title}`
       : `${process.env.REACT_APP_API_BASE_URL}/job?page=${page}&pagesize=${pageSize}`;
   try {
