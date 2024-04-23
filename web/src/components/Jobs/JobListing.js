@@ -7,47 +7,57 @@ import { fetchJobs } from "../../services/jobService";
 function JobListing() {
   const [selectedJob, setSelectedJob] = useState(null);
   const [showDetail, setShowDetail] = useState(false);
-  const [jobs, setJobs] = useState([]);
+  const [jobsNormal, setJobsNormal] = useState([]);
+  const [jobsSearch, setJobsSearch] = useState([]);
+  const [jobsRender, setJobsRender] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
+  const [pageNormal, setPageNormal] = useState(1);
+  const [pageSearch, setPageSearch] = useState(1);
+  const [pageRender, setPageRender] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [industry, setIndustry] = useState("");
   const [title, setTitle] = useState("");
   const [search, setSearch] = useState(false);
 
   const getJobs = useCallback(async () => {
-    console.log("hiiiiii");
-    if (search) {
-      console.log("search ....");
-      setLoading(true);
-      try {
-        const jobsData = await fetchJobs(page, 5, null, industry, title);
-        if (jobsData.length === 0) {
-          setHasMore(false);
+    setLoading(true);
+    try {
+      const jobsData = await fetchJobs(pageRender, 5, null, industry, title);
+      if (jobsData.length === 0) {
+        setHasMore(false);
+      } else {
+        if (search) {
+          setJobsSearch((prevJobs) => {
+            const newJobs = jobsData.filter(
+              (job) => !prevJobs.some((prevJob) => prevJob.jId === job.jId)
+            );
+            return [...prevJobs, ...newJobs];
+          });
         } else {
-          setJobs((prevJobs) => {
+          setJobsNormal((prevJobs) => {
             const newJobs = jobsData.filter(
               (job) => !prevJobs.some((prevJob) => prevJob.jId === job.jId)
             );
             return [...prevJobs, ...newJobs];
           });
         }
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-        setSearch(false);
       }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
-  }, [page, industry, title, search]);
+  }, [pageRender, industry, title, search]);
 
   useEffect(() => {
     getJobs();
   }, [getJobs]);
 
   useEffect(() => {
-    setSearch(true);
-  }, []);
+    console.log(search);
+    setJobsRender(search ? jobsSearch : jobsNormal);
+    setPageRender(search ? pageSearch : pageNormal);
+  }, [search, jobsNormal, jobsSearch, pageSearch, pageNormal]);
 
   const handleScroll = () => {
     if (
@@ -55,8 +65,9 @@ function JobListing() {
       !loading &&
       hasMore
     ) {
-      setPage((prevPage) => prevPage + 1);
-      setSearch(true);
+      search
+        ? setPageSearch((prevPage) => prevPage + 1)
+        : setPageNormal((prevPage) => prevPage + 1);
     }
   };
 
@@ -71,9 +82,7 @@ function JobListing() {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    setJobs([]);
-    // setPage(page);
-    setSearch(true);
+    setSearch(!search);
   };
 
   return (
@@ -84,20 +93,28 @@ function JobListing() {
             <input
               type="search"
               placeholder="Search by job title"
-              onChange={(e) => setTitle(e.target.value.trim())}
+              onChange={(e) => {
+                e.preventDefault();
+                setTitle(e.target.value.trim());
+                setSearch(false);
+              }}
               value={title}
             />
             <input
               type="search"
               placeholder="Search by industry"
-              onChange={(e) => setIndustry(e.target.value.trim())}
+              onChange={(e) => {
+                e.preventDefault();
+                setIndustry(e.target.value.trim());
+                setSearch(false);
+              }}
               value={industry}
             />
-            <button type="Submit">Search</button>
+            <button type="Submit">{search ? "Back" : "Search"}</button>
           </form>
           <div className="joblisting-list" onScroll={handleScroll}>
-            {jobs.length !== 0 &&
-              jobs.map((job) => (
+            {jobsRender.length !== 0 &&
+              jobsRender.map((job) => (
                 <div
                   key={job.jId}
                   className={`joblisting-item ${
