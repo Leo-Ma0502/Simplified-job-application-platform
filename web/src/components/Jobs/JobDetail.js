@@ -7,7 +7,7 @@ const JobDetail = ({ job }) => {
   const handleApply = () => {
     if (job) {
       const mailtoLink = `mailto:${
-        job.email || "change@email_address.com"
+        job.contact || "change@email_address.com"
       }?subject=Application for ${
         job.title
       }&body=Hi, I am interested in the position advertised.`;
@@ -25,6 +25,7 @@ const JobDetail = ({ job }) => {
         Posted:
         {formatDistanceToNow(parseISO(job.postdate), { addSuffix: true })}
       </p>
+      <p>Contact: {job.contact}</p>
       <p>
         Application closes:
         {formatDistanceToNow(parseISO(job.deadline), { addSuffix: true })}
