@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import JobItem from "./JobItem";
 import JobDetail from "./JobDetail";
 import "./JobListing.css";
@@ -11,12 +11,17 @@ function JobListing() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [industry, setIndustry] = useState("");
+  const [title, setTitle] = useState("");
+  const [search, setSearch] = useState(false);
 
-  useEffect(() => {
-    const getJobs = async () => {
+  const getJobs = useCallback(async () => {
+    console.log("hiiiiii");
+    if (search) {
+      console.log("search ....");
       setLoading(true);
       try {
-        const jobsData = await fetchJobs(page, 5);
+        const jobsData = await fetchJobs(page, 5, null, industry, title);
         if (jobsData.length === 0) {
           setHasMore(false);
         } else {
@@ -31,10 +36,18 @@ function JobListing() {
         console.error(error);
       } finally {
         setLoading(false);
+        setSearch(false);
       }
-    };
+    }
+  }, [page, industry, title, search]);
+
+  useEffect(() => {
     getJobs();
-  }, [page]);
+  }, [getJobs]);
+
+  useEffect(() => {
+    setSearch(true);
+  }, []);
 
   const handleScroll = () => {
     if (
@@ -43,6 +56,7 @@ function JobListing() {
       hasMore
     ) {
       setPage((prevPage) => prevPage + 1);
+      setSearch(true);
     }
   };
 
@@ -55,25 +69,32 @@ function JobListing() {
     setShowDetail(false);
   };
 
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    setJobs([]);
+    // setPage(page);
+    setSearch(true);
+  };
+
   return (
     <div className="joblisting-container">
       <div className="joblisting-body">
         <div className="joblisting-left">
-          <div className="joblisting-search">
+          <form className="joblisting-search" onSubmit={handleSearch}>
             <input
               type="search"
               placeholder="Search by job title"
-              // onChange={handleChange}
-              // value={searchInput}
+              onChange={(e) => setTitle(e.target.value.trim())}
+              value={title}
             />
             <input
               type="search"
               placeholder="Search by industry"
-              // onChange={handleChange}
-              // value={searchInput}
+              onChange={(e) => setIndustry(e.target.value.trim())}
+              value={industry}
             />
-            <button>Search</button>
-          </div>
+            <button type="Submit">Search</button>
+          </form>
           <div className="joblisting-list" onScroll={handleScroll}>
             {jobs.length !== 0 &&
               jobs.map((job) => (
