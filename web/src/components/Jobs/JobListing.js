@@ -18,43 +18,55 @@ function JobListing() {
   const [industry, setIndustry] = useState("");
   const [title, setTitle] = useState("");
   const [search, setSearch] = useState(false);
+  const [triggerRequest, setTrigger] = useState(false);
 
   const getJobs = useCallback(async () => {
+    if (!triggerRequest) {
+      return;
+    }
+    console.log("page: ", pageRender);
+    console.log("searching: ", search);
     setLoading(true);
     try {
       const jobsData = await fetchJobs(pageRender, 5, null, industry, title);
+      search && pageRender === 1 && setJobsSearch([]);
       if (jobsData.length === 0) {
         setHasMore(false);
       } else {
-        if (search) {
+        search &&
           setJobsSearch((prevJobs) => {
             const newJobs = jobsData.filter(
               (job) => !prevJobs.some((prevJob) => prevJob.jId === job.jId)
             );
             return [...prevJobs, ...newJobs];
           });
-        } else {
+
+        !search &&
           setJobsNormal((prevJobs) => {
             const newJobs = jobsData.filter(
               (job) => !prevJobs.some((prevJob) => prevJob.jId === job.jId)
             );
             return [...prevJobs, ...newJobs];
           });
-        }
       }
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
+      setTrigger(false);
+      setHasMore(true);
     }
-  }, [pageRender, industry, title, search]);
+  }, [pageRender, industry, title, search, triggerRequest]);
 
   useEffect(() => {
     getJobs();
   }, [getJobs]);
 
   useEffect(() => {
-    console.log(search);
+    setTrigger(true);
+  }, []);
+
+  useEffect(() => {
     setJobsRender(search ? jobsSearch : jobsNormal);
     setPageRender(search ? pageSearch : pageNormal);
   }, [search, jobsNormal, jobsSearch, pageSearch, pageNormal]);
@@ -65,9 +77,11 @@ function JobListing() {
       !loading &&
       hasMore
     ) {
+      console.log("scroll");
       search
         ? setPageSearch((prevPage) => prevPage + 1)
         : setPageNormal((prevPage) => prevPage + 1);
+      setTrigger(true);
     }
   };
 
@@ -82,7 +96,12 @@ function JobListing() {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    setSearch(!search);
+    if (title || industry) {
+      setSearch(!search);
+      setTrigger(true);
+      setPageNormal(1);
+      setPageSearch(1);
+    }
   };
 
   return (
