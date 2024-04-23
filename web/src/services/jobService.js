@@ -1,7 +1,18 @@
-export const fetchJobs = async (page, pageSize = 10) => {
-  const key = `jobs-${page}`;
+export const fetchJobs = async (
+  page,
+  pageSize = 10,
+  keyword = null,
+  industry = null,
+  title = null
+) => {
+  const key = `jobs-${page}-${keyword || "none"}-${industry || "none"}-${
+    title || "none"
+  }`;
   const cachedJobs = sessionStorage.getItem(key);
-  const endpoint = `${process.env.REACT_APP_API_BASE_URL}/job?page=${page}&pagesize=${pageSize}`;
+  const endpoint =
+    keyword || industry || title
+      ? `${process.env.REACT_APP_API_BASE_URL}/job/search?page=${page}&pagesize=${pageSize}&keyword=${keyword}&industry=${industry}&title=${title}`
+      : `${process.env.REACT_APP_API_BASE_URL}/job?page=${page}&pagesize=${pageSize}`;
   try {
     if (cachedJobs) {
       return JSON.parse(cachedJobs);

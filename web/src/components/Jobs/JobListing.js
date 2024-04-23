@@ -58,28 +58,45 @@ function JobListing() {
   return (
     <div className="joblisting-container">
       <div className="joblisting-body">
-        <div className="joblisting-list" onScroll={handleScroll}>
-          {jobs.length !== 0 &&
-            jobs.map((job) => (
-              <div
-                key={job.jId}
-                className={`joblisting-item ${
-                  selectedJob && selectedJob.jId === job.jId
-                    ? "joblisting-item-selected"
-                    : ""
-                }`}
-                onClick={() => handleJobClick(job)}
-              >
-                {job && (
-                  <JobItem
-                    jobTitle={job.title}
-                    jobLocation={job.location}
-                    postDate={job.postdate}
-                  />
-                )}
-              </div>
-            ))}
-          <p>No more jobs available</p>
+        <div className="joblisting-left">
+          <div className="joblisting-search">
+            <input
+              type="search"
+              placeholder="Search by job title"
+              // onChange={handleChange}
+              // value={searchInput}
+            />
+            <input
+              type="search"
+              placeholder="Search by industry"
+              // onChange={handleChange}
+              // value={searchInput}
+            />
+            <button>Search</button>
+          </div>
+          <div className="joblisting-list" onScroll={handleScroll}>
+            {jobs.length !== 0 &&
+              jobs.map((job) => (
+                <div
+                  key={job.jId}
+                  className={`joblisting-item ${
+                    selectedJob && selectedJob.jId === job.jId
+                      ? "joblisting-item-selected"
+                      : ""
+                  }`}
+                  onClick={() => handleJobClick(job)}
+                >
+                  {job && (
+                    <JobItem
+                      jobTitle={job.title}
+                      jobLocation={job.location}
+                      postDate={job.postdate}
+                    />
+                  )}
+                </div>
+              ))}
+            <p>No more jobs available</p>
+          </div>
         </div>
 
         <div
