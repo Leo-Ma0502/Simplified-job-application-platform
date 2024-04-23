@@ -24,8 +24,6 @@ function JobListing() {
     if (!triggerRequest) {
       return;
     }
-    console.log("page: ", pageRender);
-    console.log("searching: ", search);
     setLoading(true);
     try {
       const jobsData = await fetchJobs(pageRender, 5, null, industry, title);
@@ -77,7 +75,6 @@ function JobListing() {
       !loading &&
       hasMore
     ) {
-      console.log("scroll");
       search
         ? setPageSearch((prevPage) => prevPage + 1)
         : setPageNormal((prevPage) => prevPage + 1);
