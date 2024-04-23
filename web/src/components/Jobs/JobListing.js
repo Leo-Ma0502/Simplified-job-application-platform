@@ -13,7 +13,6 @@ function JobListing() {
   const [loading, setLoading] = useState(true);
   const [pageNormal, setPageNormal] = useState(1);
   const [pageSearch, setPageSearch] = useState(1);
-  const [pageRender, setPageRender] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [industry, setIndustry] = useState("");
   const [title, setTitle] = useState("");
@@ -26,35 +25,31 @@ function JobListing() {
     }
     setLoading(true);
     try {
-      const jobsData = await fetchJobs(pageRender, 5, null, industry, title);
-      search && pageRender === 1 && setJobsSearch([]);
+      const jobsData = await fetchJobs(
+        search ? pageSearch : pageNormal,
+        5,
+        null,
+        industry,
+        title
+      );
       if (jobsData.length === 0) {
         setHasMore(false);
       } else {
-        search &&
-          setJobsSearch((prevJobs) => {
-            const newJobs = jobsData.filter(
-              (job) => !prevJobs.some((prevJob) => prevJob.jId === job.jId)
-            );
-            return [...prevJobs, ...newJobs];
-          });
-
-        !search &&
-          setJobsNormal((prevJobs) => {
-            const newJobs = jobsData.filter(
-              (job) => !prevJobs.some((prevJob) => prevJob.jId === job.jId)
-            );
-            return [...prevJobs, ...newJobs];
-          });
+        const updateFunction = search ? setJobsSearch : setJobsNormal;
+        updateFunction((prevJobs) => {
+          const newJobs = jobsData.filter(
+            (job) => !prevJobs.some((prevJob) => prevJob.jId === job.jId)
+          );
+          return [...prevJobs, ...newJobs];
+        });
       }
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
       setTrigger(false);
-      setHasMore(true);
     }
-  }, [pageRender, industry, title, search, triggerRequest]);
+  }, [pageNormal, pageSearch, industry, title, search, triggerRequest]);
 
   useEffect(() => {
     getJobs();
@@ -64,23 +59,26 @@ function JobListing() {
     setTrigger(true);
   }, []);
 
-  useEffect(() => {
-    setJobsRender(search ? jobsSearch : jobsNormal);
-    setPageRender(search ? pageSearch : pageNormal);
-  }, [search, jobsNormal, jobsSearch, pageSearch, pageNormal]);
-
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     if (
-      window.innerHeight + window.scrollY >= document.body.offsetHeight &&
+      window.innerHeight + window.scrollY >= document.body.offsetHeight - 100 &&
       !loading &&
       hasMore
     ) {
-      search
-        ? setPageSearch((prevPage) => prevPage + 1)
-        : setPageNormal((prevPage) => prevPage + 1);
+      const nextPage = search ? pageSearch + 1 : pageNormal + 1;
+      search ? setPageSearch(nextPage) : setPageNormal(nextPage);
       setTrigger(true);
     }
-  };
+  }, [loading, hasMore, pageSearch, pageNormal, search]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
+  useEffect(() => {
+    setJobsRender(search ? jobsSearch : jobsNormal);
+  }, [search, jobsNormal, jobsSearch]);
 
   const handleJobClick = (job) => {
     setSelectedJob(job);
@@ -91,14 +89,19 @@ function JobListing() {
     setShowDetail(false);
   };
 
-  const handleSearch = async (e) => {
+  const handleSearch = (e) => {
     e.preventDefault();
-    if (title || industry) {
+    if (industry || title) {
       setSearch(!search);
       setTrigger(true);
-      setPageNormal(1);
-      setPageSearch(1);
     }
+    if (!search) {
+      setPageSearch(1);
+      setJobsSearch([]);
+    } else {
+      setPageNormal(1);
+    }
+    setHasMore(true);
   };
 
   return (
@@ -126,7 +129,7 @@ function JobListing() {
               }}
               value={industry}
             />
-            <button type="Submit">{search ? "Back" : "Search"}</button>
+            <button type="submit">{search ? "Back" : "Search"}</button>
           </form>
           <div className="joblisting-list" onScroll={handleScroll}>
             {jobsRender.length !== 0 &&
@@ -149,7 +152,7 @@ function JobListing() {
                   )}
                 </div>
               ))}
-            <p>No more jobs available</p>
+            {!hasMore && <p>No more jobs available</p>}
           </div>
         </div>
 
