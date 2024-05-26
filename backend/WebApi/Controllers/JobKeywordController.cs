@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using WebApi.Models;
 using WebApi.Services;
 
 namespace WebApi.Controllers
 {
     [Route("[controller]")]
+    [Authorize]
     [ApiController]
     public class JobKeywordController : ControllerBase
     {

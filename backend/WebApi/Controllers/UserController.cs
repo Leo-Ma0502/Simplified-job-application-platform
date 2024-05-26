@@ -3,12 +3,14 @@ using System.Threading.Tasks;
 using WebApi.Models;
 using WebApi.Services;
 using WebApi.DTO;
+using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 
 namespace WebApi.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
@@ -36,6 +38,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] User user)
         {
             if (!ModelState.IsValid)
@@ -72,6 +75,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDto)
         {
             var user = await _userService.AuthenticateAsync(loginDto.Email, loginDto.Password);
