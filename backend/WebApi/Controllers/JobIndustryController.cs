@@ -8,7 +8,6 @@ using WebApi.Services;
 namespace WebApi.Controllers
 {
     [Route("[controller]")]
-    [Authorize]
     [ApiController]
     public class JobIndustryController : ControllerBase
     {
