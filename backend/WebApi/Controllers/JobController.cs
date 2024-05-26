@@ -9,7 +9,6 @@ namespace WebApi.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize]
     public class JobController : ControllerBase
     {
         private readonly IJobService _jobService;
