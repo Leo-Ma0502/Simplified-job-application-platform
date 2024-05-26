@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using WebApi.Models;
 using WebApi.Services;
 
@@ -8,6 +9,7 @@ namespace WebApi.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class JobController : ControllerBase
     {
         private readonly IJobService _jobService;
